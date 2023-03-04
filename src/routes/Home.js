@@ -1,6 +1,7 @@
-import { dbService } from 'fbase';
+import { dbService, storageService } from 'fbase';
 import React, { useEffect, useState } from "react";
 import Nweet from "components/Nweet";
+import {v4 as uuidv4} from 'uuid';
 
 const Home = ({ userObj }) => {
     const [nweet, setNweet] = useState("");
@@ -20,12 +21,23 @@ const Home = ({ userObj }) => {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        await dbService.collection("nweets").add({
+        let attachmentUrl = "";
+        if(attachment != ""){
+            const attachmentRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
+            const response = await attachmentRef.putString(attachment,"data_url");
+            attachmentUrl = await response.ref.getDownloadURL();
+        }
+
+        const nweetObj = {
             text: nweet,
             createdAt: Date.now(),
             creatorId: userObj.uid,
-        });
+            attachmentUrl
+        }
+        await dbService.collection("nweets").add(nweetObj);
         setNweet("");
+        setAttachment("");
+
     };
     const onChange = (event) => {
         const {
@@ -33,20 +45,20 @@ const Home = ({ userObj }) => {
         } = event;
         setNweet(value);
     };
-    const onFileChange = (event) => {
+    const onattachmentChange = (event) => {
 
         const {
-            target : {files},
+            target : {attachments},
         } = event ;
-        const theFile = files[0];
-        const reader = new FileReader();
+        const theattachment = attachments[0];
+        const reader = new attachmentReader();
         reader.onloadend = (finishedEvent) => {
                 const {
                     currentTarget : {result},
                 } = finishedEvent;
                 setAttachment(result);
         }
-        reader.readAsDataURL(theFile);
+        reader.readAsDataURL(theattachment);
 
     };
     const onClearAttachment = () => setAttachment(null);
@@ -60,7 +72,7 @@ const Home = ({ userObj }) => {
                     placeholder="What's on your mind?"
                     maxLength={120}
                 />
-                <input type="file" accept='image/*' onChange={onFileChange}/>
+                <input type="attachment" accept='image/*' onChange={onattachmentChange}/>
                 <input type="submit" value="Nweet" />
                 {attachment && (
                 <div>
