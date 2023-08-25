@@ -24,7 +24,7 @@
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "http://nWeeter",
+  "homepage": "https://da-co-life.github.io/n-weeter",
   "eslintConfig": {
     "extends": [
       "react-app",
