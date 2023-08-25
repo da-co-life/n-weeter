@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/n-weeter/static/css/main.7ca68190.css",
+    "main.js": "/n-weeter/static/js/main.334845c0.js",
+    "index.html": "/n-weeter/index.html",
+    "main.7ca68190.css.map": "/n-weeter/static/css/main.7ca68190.css.map",
+    "main.334845c0.js.map": "/n-weeter/static/js/main.334845c0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7ca68190.css",
+    "static/js/main.334845c0.js"
+  ]
+}
